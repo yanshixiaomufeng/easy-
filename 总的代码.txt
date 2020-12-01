@@ -1,0 +1,40 @@
+#include <Servo.h>
+#define DuoPIN D5//定义各种串口和接口
+#define Echo D2
+#define Trig D8
+Servo myDuoJi;//定义Servo类，myDuoJi是鸵机名字
+long getTime(){//定义获得时间方法
+  digitalWrite(Trig,HIGH);//这里超声波模块发出波，记录时间
+  delayMicroseconds(10);
+  digitalWrite(Trig,LOW);
+  
+  return pulseIn(Echo,HIGH);
+}
+void initChaoShengBo(){//这里是初始化
+  pinMode(Echo,INPUT);
+  pinMode(Trig,OUTPUT);
+
+}
+void setup() {//setup()函数中的函数会被不停执行
+  // put your setup code here, to run once:
+  initChaoShengBo();//初始化超声波
+  myDuoJi.attach(DuoPIN);
+  Serial.begin(115200);
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  //获取距离
+  long dis;
+  dis=getTime()/58;//通过发出声波和接受声波的时间差算距离
+   if(dis>=10){
+      myDuoJi.write(10);
+    }
+    else{
+      myDuoJi.write(120);
+    }
+ 
+  delay(2000);
+
+}
